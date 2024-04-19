@@ -1,0 +1,57 @@
+<!-- app/views/employees/_form.html.erb -->
+
+<div class="col-span-2">
+    <div class="p-4 mb-4 bg-white border border-gray-200 rounded-lg shadow-sm 2xl:col-span-2 dark:border-gray-700 sm:p-6 dark:bg-gray-800">
+        <%= form_with model: employee, local: true, class: "space-y-6" do |form| %>
+            <% if employee.errors.any? %>
+                <div id="error_explanation" class="bg-red-100 text-red-700 p-4 rounded">
+                    <h2><%= pluralize(employee.errors.count, "error") %> prohibited this employee from being saved:</h2>
+                    <ul>
+                        <% employee.errors.full_messages.each do |message| %>
+                            <li><%= message %></li>
+                        <% end %>
+                    </ul>
+                </div>
+            <% end %>
+
+            <% # Lista de campos del formulario %>
+            <% fields = {
+                first_name: 'text_field',
+                last_name: 'text_field',
+                position: 'text_field',
+                phone_number: 'text_field',
+                email: 'email_field',
+                address: 'text_field',
+                salary: ['number_field', { step: 0.01 }],
+                birth_date: 'date_field',
+                start_date: 'date_field',
+                active: 'check_box'
+            } %>
+            
+            <div class="grid grid-cols-6 gap-6">
+                <% fields.each do |field, method| %>
+                    <div class="col-span-6 sm:col-span-3">
+                        <%= form.label field, class: "block mb-2 text-sm font-medium text-gray-900 dark:text-white" %>
+                        <% if field == :active %>
+                            <%= form.public_send(method, field, class: "shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-
+                                primary-500 focus:border-primary-500 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white 
+                                dark:focus:ring-primary-500 dark:focus:border-primary-500") %>
+                        <% else %>
+                            <%= form.public_send(method.is_a?(Array) ? method.first : method, field, **(method.is_a?(Array) ? method.last : {}), class: "shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-
+                                primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white 
+                                dark:focus:ring-primary-500 dark:focus:border-primary-500") %>
+                        <% end %>
+                        
+                    </div>
+                <% end %>
+                
+                <div class="col-span-6 sm:col-full">
+                    <%= form.submit "Submit", class: "text-white bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800" %>
+                    <%= link_to 'Cancel', employees_path, class: "px-5 py-2.5 mb-3 mr-3 text-sm font-medium text-center text-gray-900 bg-white border border-gray-300 rounded-lg hover:bg-gray-100 focus:ring-4 focus:ring-primary-300 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700" %>
+                </div>
+            </div>
+
+        <% end %>
+
+    </div>
+</div>
