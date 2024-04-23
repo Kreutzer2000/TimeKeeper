@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  devise_for :users
   # get 'attendances/index'
   # get 'attendances/show'
   # get 'attendances/new'
@@ -7,6 +8,16 @@ Rails.application.routes.draw do
   # get 'employees/show'
   # get 'employees/new'
   # get 'employees/edit'
+
+  devise_scope :user do
+    authenticated :user do
+      root 'employees#index', as: :authenticated_root
+    end
+
+    unauthenticated :user do
+      root to: 'devise/sessions#new', as: :unauthenticated_root
+    end
+  end
 
   # Esta línea añade todas las rutas CRUD necesarias para empleados
   resources :employees
@@ -22,5 +33,5 @@ Rails.application.routes.draw do
   # Defines the root path route ("/")
   # root "posts#index"
   # Opcional: Define una ruta raíz, por ejemplo, para listar empleados
-  root "employees#index"
+  # root "employees#index"
 end

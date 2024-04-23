@@ -1,10 +1,13 @@
 class EmployeesController < ApplicationController
+  before_action :authenticate_user!
+
   def index
     @employees = Employee.all
   end
 
   def show
     @employee = Employee.find(params[:id])
+    @user = @employee.user
   end
 
   def new
@@ -14,6 +17,7 @@ class EmployeesController < ApplicationController
   def create
     @employee = Employee.new(employee_params)
     if @employee.save
+      flash[:user_password] = @employee.user.temporary_password if @employee.user.present?
       redirect_to @employee, notice: "Employee was successfully created."
     else
       render :new
